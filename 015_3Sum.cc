@@ -23,7 +23,7 @@ private:
 			if (sum > target)													// c is too large
 				while ((tail > head) && (nums[head] + nums[tail] > target))
 					tail--;
-			else if (sum < 0)													// b is too small
+			else if (sum < target)												// b is too small
 				while ((head < tail) && (nums[head] + nums[tail] < target))
 					head++;
 			else {																// find a solution
