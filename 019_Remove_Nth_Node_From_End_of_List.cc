@@ -22,4 +22,4 @@ public:
 		cur_node->next = cur_node->next->next;
 		return head;
 	}
-}
+};
