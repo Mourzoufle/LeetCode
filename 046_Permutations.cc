@@ -15,6 +15,7 @@ private:
 			permutations.push_back(nums);
 			return;
 		}
+
 		get_permutations(nums, idx + 1, permutations);		// get permutations with the number at this index not changed
 		for (int i = idx + 1; i < nums.size(); i++) {		// ...and get all permutations with each possible number at this position
 			swap(nums[idx], nums[i]);
