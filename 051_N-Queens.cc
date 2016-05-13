@@ -1,34 +1,33 @@
 class Solution {
 public:
 	vector<vector<string>> solveNQueens(int n) {
-		vector<vector<string>> solutions;																																	// the resulting solutions
-		vector<string> solution(n, string(n, '.'));																															// current solution
-		solveNQueens(0, solutions, solution);
+		vector<vector<string>> solutions;														// the resulting solutions
+		vector<string> solution(n, string(n, '.'));												// current solution
+		vector<bool> is_valid_45(2 * n - 1, true), is_valid_90(n, true), is_valid_135(2 * n - 1, true);
+		solveNQueens(n, 0, solutions, solution, is_valid_45, is_valid_90, is_valid_135);		// flags indicating if each straight or diagonal line is valid to place a queen
 
 		return solutions;
 	}
 
 private:
 	/* recursively find all valid positions of the queen in the current row */
-	void solveNQueens(int row, vector<vector<string>> &solutions, vector<string> &solution) {
-		int size = solution.size();
-		if (row == size) {																																					// all queens are checked and have valid positions - a solution found
+	void solveNQueens(int size, int row, vector<vector<string>> &solutions, vector<string> &solution, vector<bool> &is_valid_45, vector<bool> &is_valid_90, vector<bool> &is_valid_135) {
+		if (row == size) {																		// all queens are checked and have valid positions - a solution found
 			solutions.push_back(solution);
 			return;
 		}
 
 		for (int i = 0; i < size; i++) {
-			bool is_valid = true;																																			// flag indicating if the current column is valid
-			for (int j = 0; j < row; j++) {
-				if ((solution[j][i] == 'Q') || ((i + row - j < size) && (solution[j][i + row - j] == 'Q')) || ((i + j - row >= 0) && (solution[j][i + j - row] == 'Q'))) {
-					is_valid = false;
-					break;
-				}
-			}
-			if (is_valid) {
+			if (is_valid_45[row + i] && is_valid_90[i] && is_valid_135[size - 1 + i - row]) {	// lines related to this position are all valid - a candidate position for the current queen
 				solution[row][i] = 'Q';
-				solveNQueens(row + 1, solutions, solution);
+				is_valid_45[row + i] = false;
+				is_valid_90[i] = false;
+				is_valid_135[size - 1 + i - row] = false;
+				solveNQueens(size, row + 1, solutions, solution, is_valid_45, is_valid_90, is_valid_135);
 				solution[row][i] = '.';
+				is_valid_45[row + i] = true;
+				is_valid_90[i] = true;
+				is_valid_135[size - 1 + i - row] = true;
 			}
 		}
 	}
